@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VOID & IVY · shadow & thorn · botanical relics</title>
+  <!-- Typography: gothic serif + shadow sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* THEME: VOID (deep forest + shadow petals) */
+    :root[data-theme="void"] {
+      --bg: #0f0d12;
+      --surface: #1a1620;
+      --surface-elevated: #26212e;
+      --text: #ece4e8;
+      --text-soft: #b6a8b3;
+      --text-muted: #5e5266;
+      --accent: #6b4c7a;
+      --accent-glow: #aa7ebf;
+      --accent-deep: #4a2d57;
+      --accent-subtle: #2d2435;
+      --border-light: #574a63;
+      --shadow-sm: 0 12px 28px -10px rgba(0,0,0,0.7);
+      --shadow-lg: 0 25px 45px -12px rgba(0,0,0,1);
+      --transition: 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      --radius-card: 8px 32px 8px 32px;
+      --grid-gap: 1.8rem;
+      --font-display: 'Cormorant Garamond', serif;
+    }
+
+    /* second theme: "thicket" — pale moss + faded bloom */
+    :root[data-theme="thicket"] {
+      --bg: #f2efe4;
+      --surface: #ffffff;
+      --surface-elevated: #faf8f0;
+      --text: #2c2628;
+      --text-soft: #8e7d7a;
+      --text-muted: #cdc2bc;
+      --accent: #9b6a6a;
+      --accent-glow: #c69c9c;
+      --accent-deep: #7a4f4f;
+      --accent-subtle: #f1e8e4;
+      --border-light: #ddd0ca;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      scroll-behavior: smooth;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 10px;
+    }
+
+    /* header — shadow gate */
+    .void-header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(15, 13, 18, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 2px solid var(--accent);
+      transition: var(--transition);
+    }
+    [data-theme="thicket"] .void-header {
+      background: rgba(242, 239, 228, 0.96);
+      border-bottom-color: var(--accent);
+    }
+
+    .nav-void {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.7rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .brand-void {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--accent-glow);
+      text-transform: uppercase;
+      border-left: 4px solid var(--accent);
+      padding-left: 14px;
+    }
+    .brand-void small {
+      font-size: 0.45rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      margin-left: 8px;
+      color: var(--text-soft);
+      font-family: monospace;
+    }
+
+    .nav-void-links {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+    }
+    .nav-void-links a {
+      color: var(--text-soft);
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .nav-void-links a:hover {
+      color: var(--accent-glow);
+      border-bottom: 1px solid;
+      padding-bottom: 3px;
+    }
+
+    .void-utils {
+      display: flex;
+      gap: 1.6rem;
+      align-items: center;
+    }
+    #themeToggleVoid {
+      background: var(--accent-subtle);
+      border: none;
+      padding: 5px 12px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text);
+      font-family: monospace;
+      border-radius: 30px;
+    }
+    .void-cart {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    .cart-count-void {
+      background: var(--accent);
+      color: #0f0d12;
+      font-size: 0.55rem;
+      font-weight: 800;
+      border-radius: 30px;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -8px;
+      right: -14px;
+    }
+
+    /* hero — shadow bloom */
+    .hero-void {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      background-image: url('https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: 50% 30%;
+    }
+    .hero-void::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0f0d12cc 0%, #1a1620dd 100%);
+      z-index: 1;
+    }
+    .hero-void-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      padding: 0 6%;
+    }
+    .hero-void-badge {
+      font-size: 0.55rem;
+      letter-spacing: 6px;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: var(--accent-glow);
+      border-left: 4px solid var(--accent);
+      padding-left: 14px;
+      font-family: monospace;
+    }
+    .hero-void-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 10vw, 5rem);
+      font-weight: 700;
+      line-height: 1.0;
+      margin-bottom: 0.8rem;
+      color: #f3ede8;
+      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 12px rgba(0,0,0,0.5);
+    }
+    .hero-void-offer {
+      font-size: 0.65rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      background: rgba(0, 0, 0, 0.6);
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      backdrop-filter: blur(4px);
+      font-family: monospace;
+      border-radius: 40px;
+    }
+
+    .btn-void {
+      background: var(--accent);
+      border: none;
+      padding: 0.8rem 2.2rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-block;
+      text-decoration: none;
+      color: #0f0d12;
+      font-family: monospace;
+      border-radius: 40px;
+    }
+    .btn-void:hover {
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(107, 76, 122, 0.4);
+    }
+
+    /* collection header */
+    .void-collection {
+      max-width: 1440px;
+      margin: 3rem auto 0.5rem auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.7rem;
+    }
+    .void-collection h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .void-collection p {
+      color: var(--accent-glow);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      font-family: monospace;
+    }
+
+    /* product grid — shadow archive */
+    .grid-void {
+      max-width: 1440px;
+      margin: 2rem auto 5rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--grid-gap);
+    }
+
+    .void-card {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      transition: var(--transition);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+    .void-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent-glow);
+      box-shadow: var(--shadow-lg);
+    }
+    .void-media {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: var(--surface-elevated);
+      filter: grayscale(10%);
+    }
+    .void-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .void-card:hover .void-media img {
+      transform: scale(1.04);
+      filter: grayscale(0%);
+    }
+    .void-quick {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(26, 22, 32, 0.96);
+      backdrop-filter: blur(8px);
+      padding: 0.8rem;
+      opacity: 0;
+      transition: 0.2s;
+      text-align: center;
+    }
+    .void-card:hover .void-quick {
+      opacity: 1;
+    }
+    .void-quick button {
+      background: var(--accent);
+      border: none;
+      width: 85%;
+      padding: 0.6rem;
+      font-size: 0.55rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #0f0d12;
+      font-family: monospace;
+      border-radius: 40px;
+    }
+    .void-quick button:hover {
+      background: white;
+      color: #26212e;
+    }
+
+    .void-info {
+      padding: 1rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .void-detail h4 {
+      font-size: 0.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent-glow);
+      letter-spacing: 2px;
+    }
+    .void-detail h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+    .void-price {
+      text-align: right;
+    }
+    .void-current {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .void-old {
+      font-size: 0.65rem;
+      text-decoration: line-through;
+      color: var(--text-muted);
+      margin-left: 0.3rem;
+    }
+
+    /* cart — shadow coffer */
+    .cart-overlay-void {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(24px);
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .cart-overlay-void.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .cart-void-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 520px;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      box-shadow: var(--shadow-lg);
+      z-index: 2001;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-overlay-void.active .cart-void-panel {
+      transform: translateX(0);
+    }
+    .cart-void-header {
+      padding: 1.4rem;
+      border-bottom: 1px solid var(--accent);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-void-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--accent-glow);
+    }
+    .close-void-cart {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .cart-void-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .void-cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.8rem;
+      background: var(--surface-elevated);
+      border-left: 3px solid var(--accent);
+      position: relative;
+      border-radius: 18px;
+    }
+    .void-cart-img {
+      width: 70px;
+      height: 85px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .void-cart-details {
+      flex: 1;
+    }
+    .void-cart-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .void-cart-price {
+      font-size: 0.7rem;
+      color: var(--accent-glow);
+      margin-top: 4px;
+    }
+    .void-cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .void-qty-btn {
+      background: var(--accent-subtle);
+      border: none;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text);
+      font-family: monospace;
+      border-radius: 30px;
+    }
+    .void-qty-btn:hover {
+      background: var(--accent);
+      color: #111;
+    }
+    .void-remove {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .cart-void-footer {
+      padding: 1.5rem;
+      border-top: 2px solid var(--accent);
+      background: var(--surface);
+    }
+    .void-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: monospace;
+    }
+    .void-checkout {
+      width: 100%;
+      background: var(--accent);
+      border: none;
+      padding: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #0f0d12;
+      font-family: monospace;
+      border-radius: 40px;
+    }
+    .void-checkout:hover {
+      background: var(--accent-glow);
+      transform: scale(0.98);
+    }
+    .empty-void-cart {
+      text-align: center;
+      color: var(--text-soft);
+      padding: 2rem;
+      font-size: 0.7rem;
+      font-family: monospace;
+    }
+
+    footer {
+      background: var(--surface-elevated);
+      margin-top: 2rem;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--accent);
+    }
+    .footer-void {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .footer-void-brand {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--accent-glow);
+    }
+    .footer-void-regions {
+      font-size: 0.5rem;
+      letter-spacing: 3px;
+      color: var(--text-soft);
+      margin: 0.6rem 0 1rem;
+      font-family: monospace;
+    }
+
+    /* modal — shadow invitation */
+    .modal-void {
+      position: fixed;
+      inset: 0;
+      z-index: 2200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(28px);
+      transition: opacity 0.25s;
+    }
+    .modal-void-block {
+      background: var(--surface);
+      max-width: 520px;
+      width: 100%;
+      border-top: 5px solid var(--accent);
+      padding: 2rem 2rem 2.2rem;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 35px 45px rgba(0,0,0,0.9);
+      border-radius: 48px 12px 48px 12px;
+    }
+    .modal-void-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .modal-void-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(107, 76, 122, 0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      border: 1px solid var(--accent);
+      color: var(--accent-glow);
+      border-radius: 50%;
+    }
+    .modal-void-title {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--accent-glow);
+      margin-bottom: 0.2rem;
+    }
+    .modal-void-desc {
+      color: var(--text-soft);
+      line-height: 1.5;
+      font-size: 0.85rem;
+      margin: 0.8rem 0;
+    }
+    .modal-void-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    .btn-void-primary {
+      background: var(--accent);
+      border: none;
+      padding: 0.7rem 2rem;
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      color: #0f0d12;
+      font-family: monospace;
+      border-radius: 40px;
+    }
+    .btn-void-secondary {
+      background: transparent;
+      border: 1px solid var(--accent);
+      padding: 0.7rem 1.8rem;
+      font-weight: 500;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: var(--text);
+      font-family: monospace;
+      border-radius: 40px;
+    }
+    .modal-fade-void {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      display: none;
+    }
+
+    @media (max-width: 780px) {
+      .nav-void { flex-direction: column; gap: 0.6rem; }
+      .grid-void { gap: 1rem; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBJZ7C7VV0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SBJZ7C7VV0');
+  </script>
+</head>
+<body>
+
+<!-- entry modal: VOID & IVY invitation -->
+<div id="entryModalVoid" class="modal-void">
+  <div class="modal-void-block">
+    <button id="closeVoidModal" class="modal-void-close"><i class="fas fa-leaf"></i></button>
+    <div class="modal-void-icon"><i class="fas fa-skull"></i></div>
+    <h2 class="modal-void-title">VOID & IVY</h2>
+    <p class="modal-void-desc">Shadow & thorn · botanical relics · ivy-wrought armor. Garments woven from midnight gardens and forgotten woods, kissed by moonlight.</p>
+    <div class="modal-void-buttons">
+      <button id="enterVoidBtn" class="btn-void-primary">🌿 ENTER THE THICKET</button>
+      <button id="laterVoidBtn" class="btn-void-secondary">DRIFT LATER</button>
+    </div>
+  </div>
+</div>
+
+<header class="void-header">
+  <div class="nav-void">
+    <div class="brand-void">VOID & IVY<small>· THORN</small></div>
+    <nav class="nav-void-links">
+      <a href="#shopVoid">SHADOW VAULT</a>
+      <a href="#shopVoid">BOTANICAL RELICS</a>
+      <a href="#shopVoid">WOVEN THORNS</a>
+      <a href="#">IVY CRYPT</a>
+    </nav>
+    <div class="void-utils">
+      <button id="themeToggleVoid">🌿 THICKET MODE</button>
+      <div class="void-cart" id="cartIconVoid">
+        <i class="fas fa-feather-alt"></i>
+        <span class="cart-count-void" id="cartCountVoid">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero-void">
+    <div class="hero-void-content">
+      <div class="hero-void-badge">SHADOW & THORN · BOTANICAL RELICS · IVY WROUGHT</div>
+      <h1 class="hero-void-title">VOID & IVY</h1>
+      <div class="hero-void-offer">first binding: <strong>15% off</strong> your first botanical relic</div>
+      <a href="#shopVoid" class="btn-void">ENTER THE THICKET →</a>
+    </div>
+  </section>
+
+  <div class="void-collection" id="shopVoid">
+    <h2>Shadow Vault · Botanical Relics & Thorn-woven Artifacts</h2>
+    <p>12 ivy goods</p>
+  </div>
+
+  <div class="grid-void" id="productGridVoid"></div>
+</main>
+
+<footer>
+  <div class="footer-void">
+    <div class="footer-void-brand">VOID & IVY</div>
+    <div class="footer-void-regions">SHADOW VAULT · BOTANICAL RELICS · THORN ARMORY</div>
+    <p style="font-size:0.55rem; opacity:0.7;">© 2026 VOID & IVY — woven from midnight gardens and forgotten woods, kissed by moonlight.</p>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div id="cartOverlayVoid" class="cart-overlay-void">
+  <div class="cart-void-panel">
+    <div class="cart-void-header">
+      <h3>🌿 SHADOW COFFER</h3>
+      <button class="close-void-cart" id="closeCartVoid"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-void-items" id="cartItemsVoid">
+      <div class="empty-void-cart">Your coffer is empty.<br>Add thorn-woven relics.</div>
+    </div>
+    <div class="cart-void-footer" id="cartFooterVoid" style="display: none;">
+      <div class="void-total"><span>Total (USD)</span><span id="cartTotalVoid">$0</span></div>
+      <button class="void-checkout" id="checkoutVoidBtn">🍂 CONSECRATE THE THICKET</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // VOID & IVY product catalog — botanical gothic theme
+  const voidProducts = [
+    { id: 8801, name: "Thornweave Cloak", category: "SHADOW", original: 899, price: 764, img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=687&auto=format&fit=crop", alt: "cloak" },
+    { id: 8802, name: "Ivy Tunic", category: "BOTANICAL", original: 348, price: 295, img: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=687&auto=format&fit=crop", alt: "tunic" },
+    { id: 8803, name: "Shadowveil Shirt", category: "LAYER", original: 595, price: 505, img: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=715&auto=format&fit=crop", alt: "shirt" },
+    { id: 8804, name: "Moss Warden Pants", category: "BOTTOMS", original: 480, price: 408, img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop", alt: "pants" },
+    { id: 8805, name: "Nocturnal Anorak", category: "OUTER", original: 805, price: 684, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600&auto=format&fit=crop", alt: "anorak" },
+    { id: 8806, name: "Void Vest", category: "VEST", original: 435, price: 369, img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=687&auto=format&fit=crop", alt: "vest" },
+    { id: 8807, name: "Hemlock Smock", category: "SMOCK", original: 1090, price: 926, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=687&auto=format&fit=crop", alt: "smock" },
+    { id: 8808, name: "Elder Coat", category: "COAT", original: 1455, price: 1236, img: "https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=2070&auto=format&fit=crop", alt: "coat" },
+    { id: 8809, name: "Ravenscar Cargo", category: "BOTTOMS", original: 565, price: 480, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=600&auto=format&fit=crop", alt: "cargo" },
+    { id: 8810, name: "Grim Hood", category: "HOODIE", original: 370, price: 314, img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=764&auto=format&fit=crop", alt: "hood" },
+    { id: 8811, name: "Witchwood Duster", category: "OUTER", original: 1870, price: 1589, img: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=688&auto=format&fit=crop", alt: "duster" },
+    { id: 8812, name: "Thorn Shacket", category: "SHIRT", original: 675, price: 573, img: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=687&auto=format&fit=crop", alt: "shacket" }
+  ];
+
+  let cartVoid = [];
+  const cartOverlayVoidDiv = document.getElementById('cartOverlayVoid');
+  const cartVoidIcon = document.getElementById('cartIconVoid');
+  const closeCartVoidBtn = document.getElementById('closeCartVoid');
+  const cartVoidContainer = document.getElementById('cartItemsVoid');
+  const cartVoidFooter = document.getElementById('cartFooterVoid');
+  const cartVoidTotalSpan = document.getElementById('cartTotalVoid');
+  const cartVoidCountSpan = document.getElementById('cartCountVoid');
+
+  function persistVoidCart() { localStorage.setItem('VOID_IVY_CART', JSON.stringify(cartVoid)); }
+  function loadVoidCart() {
+    const saved = localStorage.getItem('VOID_IVY_CART');
+    if (saved) cartVoid = JSON.parse(saved);
+    renderVoidCart();
+    updateVoidCount();
+  }
+  function updateVoidCount() { cartVoidCountSpan.innerText = cartVoid.reduce((sum,i)=>sum+i.qty,0); }
+
+  function renderVoidCart() {
+    if (!cartVoidContainer) return;
+    if (cartVoid.length === 0) {
+      cartVoidContainer.innerHTML = '<div class="empty-void-cart">Your coffer is empty.<br>Add thorn-woven relics.</div>';
+      cartVoidFooter.style.display = 'none';
+      updateVoidCount(); persistVoidCart(); return;
+    }
+    cartVoidFooter.style.display = 'block';
+    let html = ''; let total = 0;
+    cartVoid.forEach(item => {
+      total += item.price * item.qty;
+      html += `<div class="void-cart-item" data-id="${item.id}">
+          <img class="void-cart-img" src="${item.img}" alt="${item.name}">
+          <div class="void-cart-details">
+            <div class="void-cart-name">${item.name}</div>
+            <div class="void-cart-price">$${item.price.toLocaleString()}</div>
+            <div class="void-cart-qty">
+              <button class="void-qty-dec" data-id="${item.id}">−</button>
+              <span>${item.qty}</span>
+              <button class="void-qty-inc" data-id="${item.id}">+</button>
+            </div>
+          </div>
+          <button class="void-remove" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+        </div>`;
+    });
+    cartVoidContainer.innerHTML = html;
+    cartVoidTotalSpan.innerText = `$${total.toLocaleString()}`;
+    document.querySelectorAll('.void-qty-dec').forEach(btn => btn.addEventListener('click', () => updateVoidQty(parseInt(btn.dataset.id), -1)));
+    document.querySelectorAll('.void-qty-inc').forEach(btn => btn.addEventListener('click', () => updateVoidQty(parseInt(btn.dataset.id), 1)));
+    document.querySelectorAll('.void-remove').forEach(btn => btn.addEventListener('click', () => removeVoidItem(parseInt(btn.dataset.id))));
+    updateVoidCount(); persistVoidCart();
+  }
+  function updateVoidQty(pid, delta) {
+    const idx = cartVoid.findIndex(i=>i.id===pid);
+    if(idx !== -1){
+      const nq = cartVoid[idx].qty + delta;
+      if(nq <= 0) cartVoid.splice(idx,1);
+      else cartVoid[idx].qty = nq;
+      renderVoidCart();
+    }
+  }
+  function removeVoidItem(pid){ cartVoid = cartVoid.filter(i=>i.id!==pid); renderVoidCart(); }
+  function addToVoidCart(pid){
+    const prod = voidProducts.find(p=>p.id===pid);
+    if(!prod) return;
+    const existing = cartVoid.find(i=>i.id===pid);
+    if(existing) existing.qty += 1;
+    else cartVoid.push({id:prod.id, name:prod.name, price:prod.price, qty:1, img:prod.img});
+    renderVoidCart();
+    const btn = document.querySelector(`.void-add-${pid}`);
+    if(btn){ let old = btn.innerText; btn.innerText="🌿 BOUND"; setTimeout(()=>btn.innerText=old,700); }
+    cartOverlayVoidDiv.classList.add('active');
+  }
+
+  function renderVoidProducts() {
+    const container = document.getElementById('productGridVoid');
+    if(!container) return;
+    container.innerHTML = '';
+    voidProducts.forEach(p => {
+      const disc = Math.round(((p.original-p.price)/p.original)*100);
+      const card = document.createElement('div');
+      card.className = 'void-card';
+      card.innerHTML = `
+        <div class="void-media">
+          <img src="${p.img}" alt="${p.alt||p.name}" loading="lazy">
+          <div class="void-quick"><button class="void-add-${p.id} add-void-btn" data-id="${p.id}">🍂 ADD TO COFFER</button></div>
+        </div>
+        <div class="void-info">
+          <div class="void-detail"><h4>${p.category}</h4><h3>${p.name}</h3></div>
+          <div class="void-price"><span class="void-current">$${p.price.toLocaleString()}</span><span class="void-old">$${p.original.toLocaleString()}</span><span style="font-size:0.55rem;color:var(--accent-glow);display:block;text-align:right;">-${disc}%</span></div>
+        </div>`;
+      container.appendChild(card);
+    });
+    document.querySelectorAll('.add-void-btn').forEach(btn => btn.addEventListener('click', (e)=>{ e.preventDefault(); addToVoidCart(parseInt(btn.dataset.id)); }));
+  }
+
+  function initThemeVoid() {
+    const stored = localStorage.getItem('VOID_IVY_theme');
+    let theme = stored || 'void';
+    document.documentElement.setAttribute('data-theme', theme);
+    const toggle = document.getElementById('themeToggleVoid');
+    if(toggle) toggle.textContent = theme === 'void' ? '🌿 THICKET MODE' : '🌑 VOID MODE';
+  }
+  function toggleThemeVoid() {
+    const curr = document.documentElement.getAttribute('data-theme');
+    const next = curr === 'void' ? 'thicket' : 'void';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('VOID_IVY_theme', next);
+    const toggleBtn = document.getElementById('themeToggleVoid');
+    if(toggleBtn) toggleBtn.textContent = next === 'void' ? '🌿 THICKET MODE' : '🌑 VOID MODE';
+  }
+
+  // modal handlers
+  const modalVoidElem = document.getElementById('entryModalVoid');
+  const enterVoid = document.getElementById('enterVoidBtn'), laterVoid = document.getElementById('laterVoidBtn'), closeVoidModalBtn = document.getElementById('closeVoidModal');
+  function closeVoidModalFunc() {
+    if(modalVoidElem){
+      modalVoidElem.classList.add('modal-fade-void');
+      setTimeout(()=>modalVoidElem.style.display='none',200);
+    }
+  }
+  if(enterVoid) enterVoid.addEventListener('click', closeVoidModalFunc);
+  if(laterVoid) laterVoid.addEventListener('click', closeVoidModalFunc);
+  if(closeVoidModalBtn) closeVoidModalBtn.addEventListener('click', closeVoidModalFunc);
+  if(modalVoidElem) modalVoidElem.addEventListener('click',(e)=>{ if(e.target===modalVoidElem) closeVoidModalFunc(); });
+
+  cartVoidIcon?.addEventListener('click',()=>cartOverlayVoidDiv.classList.add('active'));
+  closeCartVoidBtn?.addEventListener('click',()=>cartOverlayVoidDiv.classList.remove('active'));
+  cartOverlayVoidDiv?.addEventListener('click',(e)=>{ if(e.target===cartOverlayVoidDiv) cartOverlayVoidDiv.classList.remove('active'); });
+  document.getElementById('checkoutVoidBtn')?.addEventListener('click',()=>{ alert('Void & Ivy seals your shadow offering. Your botanical relics are bound in thorn and midnight dew.'); cartVoid=[]; renderVoidCart(); cartOverlayVoidDiv.classList.remove('active'); });
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click',function(e){ const hash=this.getAttribute('href'); if(hash==="#") return; const sec=document.querySelector(hash); if(sec){ e.preventDefault(); sec.scrollIntoView({behavior:'smooth'}); } }); });
+
+  renderVoidProducts();
+  initThemeVoid();
+  loadVoidCart();
+  document.getElementById('themeToggleVoid')?.addEventListener('click', toggleThemeVoid);
+</script>
+</body>
+</html>
